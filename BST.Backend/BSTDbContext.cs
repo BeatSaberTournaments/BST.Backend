@@ -7,6 +7,7 @@ namespace BST
     {
         public DbSet<Map> Maps { get; set; } = null!;
         public DbSet<MapPool> MapPools { get; set; } = null!;
+        public DbSet<User> Users { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) =>
             optionsBuilder
@@ -23,9 +24,36 @@ namespace BST
                     .WithOne(e => e.Model)
                     .HasForeignKey(e => e.ModelId);
             });
+            
             modelBuilder.Entity<MapPool>(entity =>
             {
                 entity.HasKey(e => e.Id);
+
+                entity.HasMany(e => e.Maps)
+                    .WithOne(e => e.MapPool)
+                    .HasForeignKey(e => e.BeatSaverId);
+                
+                entity.HasOne(e => e.Owner);
+            });
+
+            modelBuilder.Entity<Map>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.HasOne(e => e.MapPool)
+                    .WithMany(e => e.Maps)
+                    .HasForeignKey(e => e.MapPool.Id);
+
+                
+            });
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.HasOne(e => e.Model)
+                    .WithMany(e => e.Users)
+                    .HasForeignKey(e => e.ScoreSaberUsers);
             });
         }
         

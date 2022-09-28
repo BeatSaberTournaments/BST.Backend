@@ -4,6 +4,7 @@ namespace BST.Models
 {
     public class Map
     {
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string BeatSaverId { get; set; }
         public string Image { get; set; }
@@ -13,5 +14,6 @@ namespace BST.Models
         public string Difficulty { get; set; }
         [JsonIgnore] public Guid MapId { get; set; }
         [JsonIgnore] public virtual Model Model { get; set; } = null!;
+        [JsonIgnore] public virtual MapPool MapPool { get; set; } = null!;
     }
 }
